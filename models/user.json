@@ -1,0 +1,41 @@
+{
+  "users": [
+    {
+      "id": 0,
+      "email": "example5@gmail.com",
+      "password": "$2b$10$GN/x77uCwmqTw5M1JUM.yuu5WjNmHDcvAdw3k/CIDlvJJaDK7/QOO",
+      "roles": "buyer"
+    },
+    {
+      "id": 1,
+      "email": "example@gmail.com",
+      "password": "$2b$10$6Gn.Yv1jvbPlgZR1m4mOiOhBl8f6vlKLXF66AeNH0RzJFHS9CDXzO",
+      "roles": "buyer"
+    },
+    {
+      "id": 3,
+      "email": "example3@gmail.com",
+      "password": "$2b$10$2JzRMB.lLEy9le7U3JrpGuY1sqkKRGUA6HpC.8D/rZGX4jtjOxCaG",
+      "roles": "seller"
+    },
+    {
+      "id": 4,
+      "email": "example4@gmail.com",
+      "password": "$2b$10$hvUJK./KjkTORegfNvNRxupWlqbnTRWLZs..6vzUyzw80bxy.sVSG",
+      "roles": "buyer"
+    },
+    {
+      "id": 5,
+      "name": "АБВ",
+      "email": "example2@gmail.com",
+      "phone": "+79999999",
+      "password": "$2b$10$eynyOrBbHzYLOXSL3yVskuCkWy89eO94QUewfuR2N2KRZHOGxPiU2",
+      "roles": "user"
+    }
+  ],
+  "roles": [
+    "buyer",
+    "seller",
+    "manager"
+  ]
+}

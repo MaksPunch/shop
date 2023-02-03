@@ -1,0 +1,11 @@
+{
+  "goods": [
+    {
+      "id": 0,
+      "price": "1000",
+      "img": "apple.jpg",
+      "name": "apple",
+      "description": "вкусный сочный яблака"
+    }
+  ]
+}
