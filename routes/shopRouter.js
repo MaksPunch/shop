@@ -92,21 +92,20 @@ router.put('/:id', auth, (req, res) => {
 })
 
 router.delete('/:id', auth, authAdmin, (req, res) => {
-    
 	const id = parseInt(req.params.id, 10);
 	jf.readFile(path, (err, obj) => {
+      if (err) throw err;
+      let fileObj = obj;
+      fileObj.goods.splice(id, 1);
+      jf.writeFile(path, fileObj, {spaces: 2}, (err) => {
         if (err) throw err;
-        let fileObj = obj;
-        fileObj.goods.splice(id, 1);
-        jf.writeFile(path, fileObj, {spaces: 2}, (err) => {
-          if (err) throw err;
-        })
-    })
-    return res.status(200).json({
-	    success: "true",
-	    message: "good deleted successfully",
-      good: file.goods[id]
-  	});
+      })
+  })
+  return res.status(200).json({
+    success: "true",
+    message: "good deleted successfully",
+    good: file.goods[id]
+  });
 })
 
 module.exports = router;

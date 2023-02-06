@@ -6,6 +6,13 @@
       "img": "apple.jpg",
       "name": "apple",
       "description": "вкусный сочный яблака"
+    },
+    {
+      "id": 1,
+      "name": "carrot",
+      "img": "carrot.png",
+      "price": "2999",
+      "description": "Морковь свежая"
     }
   ]
 }

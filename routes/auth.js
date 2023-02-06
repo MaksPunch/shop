@@ -116,7 +116,7 @@ router.put("/updateUser", auth, async (req, res) => {
             password: hashPassword || user.password,
             roles: req.user.roles
         }
-        jf.readFile('./models/user.json', (err, obj) => {
+        jf.readFile(path, (err, obj) => {
             if (err) throw err
             const fileObj = obj;
             fileObj.users[user.id - 1] = updatedUser
@@ -132,6 +132,26 @@ router.put("/updateUser", auth, async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: true, message: "Internal Server Error" });
+    }
+})
+
+router.delete('/deleteUser/:id', auth, authAdmin, (req, res) => {
+    const id = req.params.id
+    try {
+        jf.readFile(path, (err, obj) => {
+            if (err) throw err;
+            const fileObj = err;
+            fileObj.users.splice(i, 1);
+            jf.writeFile(path, fileObj, {spaces: 2}, err => {if (err) throw err})
+        })
+        return res.status(200).json({
+            success: "true",
+            message: "user deleted successfully",
+            user: User.users[id]
+        });
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({error: true, message: "Internal Server Error"})
     }
 })
 

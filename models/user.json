@@ -30,7 +30,7 @@
       "email": "example2@gmail.com",
       "phone": "+79999999",
       "password": "$2b$10$eynyOrBbHzYLOXSL3yVskuCkWy89eO94QUewfuR2N2KRZHOGxPiU2",
-      "roles": "user"
+      "roles": "manager"
     }
   ],
   "roles": [

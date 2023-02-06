@@ -8,6 +8,8 @@ var cookiesAdmin;
 let filePath = './models/goods.json'
 const file = jf.readFileSync(filePath)
 
+const userFile = jf.readFileSync('./models/user.json')
+
 describe('AUTH required', () => {
     it('login', () => {
         return request(app).post('/api/login')
@@ -57,7 +59,7 @@ describe('GET /good', function() {
 });
 
 describe('POST /good', () => {
-    /* it('should return error because access denided', (done) => {
+    it('should return error because access denided', (done) => {
         request(app)
             .post('/api/good')
             .expect(403)
@@ -65,7 +67,7 @@ describe('POST /good', () => {
                 if (err) return done(err)
                 done()
             })
-    }) */
+    })
     it('should post a new good', (done) => {
         let good = {
             id: file.goods.length,
@@ -272,6 +274,37 @@ describe('refreshToken routes', () => {
             .expect(200)
             .expect(res => {
                 expect(res.body.message).toStrictEqual('Logged Out Sucessfully')
+            })
+            .end((err, res) => {
+                if (err) return done(err)
+                done()
+            })
+    })
+})
+
+describe('DELETE /user/:id', () => {
+    it('should return error that user is not authorized', (done) => {
+        request(app)
+            .delete('/api/deleteUser/1')
+            .expect(403)
+            .expect(res => {
+                expect(res.text).toStrictEqual('Not Authorized.')
+            })
+            .end((err, res) => {
+                if (err) return done(err)
+                done()
+            })
+    })
+    it('should delete a user', (done) => {
+        request(app)
+            .delete('/api/deleteUser/1')
+            .set('cookie', cookiesAdmin)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.user).toStrictEqual(userFile.users.find(el => el.id == 1))
+                jf.writeFile('./models/user.json', userFile, {spaces: 2}, (err) => {
+                    if (err) throw err
+                })
             })
             .end((err, res) => {
                 if (err) return done(err)
