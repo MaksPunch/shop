@@ -4,7 +4,8 @@ const auth = require('../middleware/auth.js');
 const authAdmin = require('../middleware/authAdmin.js')
 const jf = require('jsonfile')
 const path = './models/goods.json'
-const file = jf.readFileSync(path)
+const file = jf.readFileSync(path);
+const connection = require('../models/db.js')
 
 const router = Router();
 
@@ -22,11 +23,14 @@ const findGoodById = (id) => {
 }
 
 router.get('/', (req, res) => {
-	return res.status(200).json({
-    success: "true",
-    message: "goods",
-    goods: file.goods,
-  });
+  connection.query('select * from goods', (err, result) => {
+    if (err) throw err
+    return res.status(200).json({
+      success: "true",
+      message: "goods",
+      goods: result,
+    });
+  }) 
 })
 
 router.get('/:id', (req, res) => {

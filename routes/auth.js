@@ -8,6 +8,7 @@ const authAdmin = require('../middleware/authAdmin.js')
 const router = Router();
 const path = './models/user.json'
 const jf = require('jsonfile');
+const connection = require('../models/db.js')
 
 const User = jf.readFileSync(path);
 
@@ -24,27 +25,31 @@ router.post("/signUp", async (req, res) => {
         if (!req.body.email) return res.status(401).json({ error: true, message: "email is required" })
         if (!req.body.password) return res.status(401).json({ error: true, message: "password is required" })
         if (!emailValidate(req.body.email)) return res.status(401).json({ error: true, message: "email is not valid" })
-        const userEmail = await User.users.find(el => el.email == req.body.email);
-        if (userEmail)
-            return res
-                .status(400)
-                .json({ error: true, message: "User with given email already exist" });
+        connection.query('select email from users', async (err, result) => {
+            if (err) throw err;
+            const userEmail = result.find(el => el == req.body.email)
+            if (userEmail)
+                return res
+                    .status(400)
+                    .json({ error: true, message: "User with given email already exist" });
 
-        const salt = await bcrypt.genSalt(Number(process.env.SALT));
-        const hashPassword = await bcrypt.hash(req.body.password, salt);
+            const salt = await bcrypt.genSalt(Number(process.env.SALT));
+            const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-        const newUser = {
-            id: User.users[User.users.length - 1].id + 1,
-            email: req.body.email,
-            password: hashPassword,
-            roles: 'buyer'
-        }
-        User.users.push(newUser)
-        jf.writeFile(path, User, {spaces: 2}, (err) => {if (err) throw err})
+            const newUser = {
+                id: User.users[User.users.length - 1].id + 1,
+                email: req.body.email,
+                password: hashPassword,
+                roles: 'buyer'
+            }
+            connection.query('insert into users (email, password, roles) values (?, ?, ?)', 
+            [req.body.email, hashPassword, 'buyer'], (err) => {if (err) throw err})
 
-        res
-            .status(201)
-            .json({ error: false, message: "Account created sucessfully", user: newUser });
+            res
+                .status(201)
+                .json({ error: false, message: "Account created sucessfully", user: newUser });
+            })
+        
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: true, message: "Internal Server Error" });
@@ -53,7 +58,6 @@ router.post("/signUp", async (req, res) => {
 
 // login
 router.post("/logIn", async (req, res) => {
-    console.log(req.body.email)
     try {
         const user = await User.users.find(el => el.email == req.body.email);
         if (!user)
